@@ -77,4 +77,147 @@ h1:hover, h2:hover, a:hover {
 
 /* ========== FLEX CARD ========== */
 .card {
-  background: rgba(255,
+  background: rgba(255, 255, 255, 0.06);
+  padding: 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 0px 25px var(--glow);
+}
+
+/* ========== PHOTO STYLING ========== */
+#mePhoto {
+  width: 230px;
+  border-radius: 12px;
+  transition: var(--transition);
+}
+
+#mePhoto:hover {
+  transform: scale(1.06);
+  box-shadow: 0px 0px 28px var(--glow);
+}
+
+/* ========== DARK/LIGHT MODE BUTTON ========== */
+#modeToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-dark);
+  backdrop-filter: blur(10px);
+}
+
+.light body {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+
+.light #modeToggle {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-light);
+}
+
+.light .card {
+  background: rgba(0,0,0,0.05);
+}
+
+</style>
+</head>
+<body>
+
+<!-- ========== BACKGROUND VIDEO (relative path) ========== -->
+<video id="bgVideo" autoplay muted loop playsinline>
+  <source src="background.mp4" type="video/mp4" />
+</video>
+
+<!-- Fallback image -->
+<img id="videoFallback" src="bg/airplane.jpeg" alt="Background" />
+
+<!-- Toggle mode -->
+<button id="modeToggle">🌙 Dark</button>
+
+<div class="container">
+
+  <h2>Prateek Pachauri — International Relations</h2>
+
+  <br><br>
+
+  <h1>History → Political Figures → Diplomacy → Strategy</h1>
+
+  <p>
+    I study world politics, strategic thinking and the intersection of history and diplomacy.
+    This portfolio showcases my research, writings and visual work.
+  </p>
+
+  <br>
+
+  <a href="https://ijisem.com/journal/index.php/ijisem/search/index?query=Prateek+Pachauri" target="_blank">
+    Publications at IJISEM →
+  </a>
+
+  <br><br><br>
+
+  <div class="card">
+    <img id="mePhoto" src="me/me.jpeg" alt="Me" />
+    <br><br>
+
+    <h2>Prateek Pachauri</h2>
+    <p>Bachelor degree student — Tomsk State University</p>
+    <p>Faculty of History & Political Science — International Relations & World Politics</p>
+  </div>
+
+  <br><br>
+
+  <h2>About</h2>
+  <p>
+    I am Prateek Pachauri, focused on research and analysis of world politics, historical narratives,
+    diplomatic strategy, information warfare, and psychology within international affairs.
+  </p>
+
+  <br><br>
+
+  <h2>Skills & Interests</h2>
+  <p>
+    Close observation of world politics, analogies, critical/strategic thinking, academic writing,
+    Indo-Aryan linguistics, Russian history, soft & hard power, public diplomacy, intelligence studies,
+    and modern non-kinetic warfare.
+  </p>
+
+  <br><br>
+
+  <h2>Contact</h2>
+  <p>Email: arceus1722@gmail.com</p>
+  <p>Telegram: Prateek47</p>
+  <p>X (Twitter): @rusprateek77</p>
+  <p>hh.ru: https://hh.ru/profile/me?hhtmFrom=ProfileActivator</p>
+
+</div>
+
+<script>
+/* ========== DARK / LIGHT MODE SCRIPT ========== */
+let mode = "dark";
+
+document.getElementById("modeToggle").onclick = function () {
+  if (mode === "dark") {
+    document.documentElement.classList.add("light");
+    this.textContent = "☀️ Light";
+    mode = "light";
+  } else {
+    document.documentElement.classList.remove("light");
+    this.textContent = "🌙 Dark";
+    mode = "dark";
+  }
+};
+</script>
+
+</body>
+</html>
