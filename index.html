@@ -1,222 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Prateek Pachauri — Portfolio</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* ========== ROOT VARIABLES ========== */
-:root {
-  --bg-dark: #0a1025;
-  --bg-light: #f5f5f5;
-  --text-dark: #ffffff;
-  --text-light: #0a1025;
-  --accent: #9db4ff;
-  --glow: rgba(157, 180, 255, 0.35);
-  --transition: 0.4s ease;
+:root{
+  --bg:#071027;
+  --card: rgba(255,255,255,0.06);
+  --accent:#9db4ff;
+  --muted: rgba(255,255,255,0.7);
+  --glass: rgba(255,255,255,0.06);
+  --transition: 320ms cubic-bezier(.2,.9,.3,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+body{
+  background:var(--bg);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-/* ========== RESET ========== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+/* BACKGROUND VIDEO */
+#bgVideo, #bgPoster {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-3;
+  pointer-events:none;
+  transition:opacity .5s ease;
+}
+#bgPoster{filter:brightness(.45);}
+
+/* page layout */
+.site {
+  position:relative;
+  z-index:5;
+  max-width:1100px;
+  margin:64px auto;
+  padding:28px;
 }
 
-body {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-  overflow-x: hidden;
-  transition: var(--transition);
+/* header text */
+.lead { color: #dfe8ff; font-weight:700; letter-spacing:-0.6px; }
+.title {
+  font-size:clamp(28px,6vw,56px);
+  line-height:1.02;
+  margin:10px 0 12px;
+  font-weight:800;
+  transition: color var(--transition), transform var(--transition);
 }
+.title:hover{ color:var(--accent); transform:translateY(-4px); text-shadow:0 12px 40px rgba(0,0,0,0.45); }
 
-/* ========== BACKGROUND VIDEO ========== */
-video#bgVideo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-  opacity: 0.55;
+/* two-column area */
+.row{display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap}
+.col-left{flex:1 1 560px;min-width:300px}
+.col-right{width:360px}
+
+/* profile card */
+.card{
+  background:var(--card);
+  padding:20px;border-radius:14px;
+  backdrop-filter:blur(8px);
+  box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+  transition:transform var(--transition), box-shadow var(--transition);
 }
+.card:hover{ transform:translateY(-12px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
 
-/* ========== BACKGROUND FALLBACK IMAGE ========== */
-#videoFallback {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -3;
-  filter: brightness(0.45);
+/* profile image */
+.profile {
+  width:160px;height:160px;border-radius:12px;object-fit:cover;display:block;margin-bottom:14px;
+  transition: transform .45s cubic-bezier(.2,.9,.3,1), box-shadow .45s;
 }
+.profile:hover{ transform:scale(1.06) rotate(-1deg); box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
 
-/* ========== CONTENT CONTAINER ========== */
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 120px 20px;
+/* links */
+a { color:var(--accent); text-decoration:none; font-weight:600; }
+a:hover { text-shadow: 0 0 14px rgba(157,180,255,0.35); transform:translateX(3px); }
+
+/* about */
+.about { margin-top:36px; color: #d7def0; }
+
+/* small utilities */
+.kicker { color:#c7d0ff; font-size:12px; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
+
+/* slideshow (crossfade) */
+.slideshow {
+  position:relative;
+  margin-top:24px;
+  height:220px;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.25);
 }
-
-/* ========== TEXT HOVER EFFECTS ========== */
-h1, h2, p, a {
-  transition: var(--transition);
+.slide {
+  position:absolute;inset:0;opacity:0;transition:opacity .9s ease; background-size:cover;background-position:center;
 }
+.slide.active{opacity:1}
 
-h1:hover, h2:hover, a:hover {
-  text-shadow: 0px 0px 18px var(--glow);
-  color: var(--accent);
+/* small controls */
+.controls{display:flex;gap:8px;margin-top:12px}
+.thumb{width:62px;height:40px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.06);cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* chessboard svg area */
+.chess-wrap{margin-top:42px}
+.chess { display:block; margin:18px auto 0; max-width:360px; }
+
+/* Dark/Light toggle */
+.mode {
+  position:fixed; right:18px; top:18px; z-index:50;
+  background: rgba(255,255,255,0.08);
+  border-radius:20px;padding:8px 12px;color:white; cursor:pointer;
 }
+.light body{ background: #fbfbff; color:#0b1020; }
+.light .card{ background: rgba(10,12,20,0.05); color:#071027; }
+.light .mode { background: rgba(0,0,0,0.06); color:#071027; }
 
-/* ========== FLEX CARD ========== */
-.card {
-  background: rgba(255, 255, 255, 0.06);
-  padding: 25px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  transition: var(--transition);
+/* responsive */
+@media (max-width:880px){
+  .col-right{width:100%}
+  .row{flex-direction:column}
+  .title{font-size: clamp(26px,8vw,42px)}
 }
-
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0px 0px 25px var(--glow);
-}
-
-/* ========== PHOTO STYLING ========== */
-#mePhoto {
-  width: 230px;
-  border-radius: 12px;
-  transition: var(--transition);
-}
-
-#mePhoto:hover {
-  transform: scale(1.06);
-  box-shadow: 0px 0px 28px var(--glow);
-}
-
-/* ========== DARK/LIGHT MODE BUTTON ========== */
-#modeToggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--text-dark);
-  backdrop-filter: blur(10px);
-}
-
-.light body {
-  background: var(--bg-light);
-  color: var(--text-light);
-}
-
-.light #modeToggle {
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--text-light);
-}
-
-.light .card {
-  background: rgba(0,0,0,0.05);
-}
-
 </style>
 </head>
 <body>
 
-<!-- ========== BACKGROUND VIDEO (relative path) ========== -->
-<video id="bgVideo" autoplay muted loop playsinline>
-  <source src="background.mp4" type="video/mp4" />
+<!-- VIDEO & POSTER (relative paths - do NOT use leading slash) -->
+<video id="bgVideo" muted playsinline loop preload="metadata" aria-hidden="true">
+  <source src="background.mp4" type="video/mp4">
+  <!-- if you have webm, add it here -->
+  Your browser does not support HTML5 video.
 </video>
 
-<!-- Fallback image -->
-<img id="videoFallback" src="bg/airplane.jpeg" alt="Background" />
+<!-- poster fallback image - will be visible if video hidden -->
+<img id="bgPoster" src="bg/airplane.jpeg" alt="" aria-hidden="true">
 
-<!-- Toggle mode -->
-<button id="modeToggle">🌙 Dark</button>
+<!-- The site content -->
+<div class="site">
+  <button class="mode" id="modeBtn">🌙 Dark</button>
 
-<div class="container">
+  <div class="kicker">PORTFOLIO — HISTORY & WORLD POLITICS</div>
+  <div class="lead">Prateek Pachauri — International Relations</div>
+  <h1 class="title">History → Political Figures → Diplomacy → Strategy</h1>
 
-  <h2>Prateek Pachauri — International Relations</h2>
+  <div class="row">
+    <div class="col-left">
+      <p style="max-width:70ch;color:#d7def0">
+        I study world politics, strategic thinking and the intersection of history and diplomacy.
+        This portfolio showcases my research, writings and visual work.
+      </p>
 
-  <br><br>
+      <p><a href="https://ijisem.com/journal/index.php/ijisem/search/index?query=Prateek+Pachauri" target="_blank">Publications at IJISEM →</a></p>
 
-  <h1>History → Political Figures → Diplomacy → Strategy</h1>
+      <!-- slideshow -->
+      <div class="slideshow card" aria-hidden="false">
+        <div class="slide" id="s0" style="background-image:url('bg/sunset.jpeg')"></div>
+        <div class="slide" id="s1" style="background-image:url('bg/airplane.jpeg')"></div>
+        <div class="slide" id="s2" style="background-image:url('me/me.jpeg')"></div>
+      </div>
 
-  <p>
-    I study world politics, strategic thinking and the intersection of history and diplomacy.
-    This portfolio showcases my research, writings and visual work.
-  </p>
+      <div class="controls">
+        <div class="thumb" data-index="0"><img src="bg/sunset.jpeg" alt=""></div>
+        <div class="thumb" data-index="1"><img src="bg/airplane.jpeg" alt=""></div>
+        <div class="thumb" data-index="2"><img src="me/me.jpeg" alt=""></div>
+      </div>
 
-  <br>
+      <div class="about">
+        <h3>About</h3>
+        <p>I am Prateek Pachauri, focused on research and analysis of world politics, historical narratives and diplomatic strategy.
+           I write about public diplomacy, information warfare and the intersection of psychology and geopolitics.</p>
+      </div>
+    </div>
 
-  <a href="https://ijisem.com/journal/index.php/ijisem/search/index?query=Prateek+Pachauri" target="_blank">
-    Publications at IJISEM →
-  </a>
+    <div class="col-right">
+      <div class="card">
+        <img class="profile" src="me/me.jpeg" alt="Prateek Pachauri">
+        <h3>Prateek Pachauri</h3>
+        <div style="color: var(--muted); margin-top:6px;">
+          Bachelor degree student — Tomsk State University<br>
+          Faculty of History & Political Science — International Relations & World Politics
+        </div>
+      </div>
 
-  <br><br><br>
+      <!-- chess animation -->
+      <div class="chess-wrap card" style="margin-top:18px; padding:18px;">
+        <div style="font-weight:700; margin-bottom:8px;">Strategy — a small thought experiment</div>
 
-  <div class="card">
-    <img id="mePhoto" src="me/me.jpeg" alt="Me" />
-    <br><br>
+        <!-- simple SVG chessboard + pawn animation -->
+        <svg class="chess" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- board squares (8x8 scaled to 200) generated -->
+          <defs>
+            <pattern id="s" width="25" height="25" patternUnits="userSpaceOnUse">
+              <rect width="25" height="25" fill="#e9e9f5"></rect>
+              <rect x="12.5" y="12.5" width="12.5" height="12.5" fill="#1f2a3d"></rect>
+            </pattern>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#bcd" stop-opacity="0.6"/>
+            </linearGradient>
+          </defs>
 
-    <h2>Prateek Pachauri</h2>
-    <p>Bachelor degree student — Tomsk State University</p>
-    <p>Faculty of History & Political Science — International Relations & World Politics</p>
+          <!-- board background -->
+          <rect x="10" y="10" width="180" height="180" rx="6" ry="6" fill="#dcdff0" stroke="#0b1220" stroke-opacity="0.06"/>
+
+          <!-- dark squares simplified -->
+          <g id="board">
+            <!-- draw 8x8 squares quickly -->
+            <g id="squares"></g>
+          </g>
+
+          <!-- pawn (circle + stem) -->
+          <g id="pawn" fill="#111820" transform="translate(20,140)">
+            <circle cx="0" cy="-12" r="6" fill="#fff" />
+            <rect x="-2" y="-10" width="4" height="18" rx="2" fill="#fff" />
+            <path d="M-8 8 q8 10 16 0" fill="#fff"/>
+          </g>
+        </svg>
+      </div>
+    </div>
   </div>
-
-  <br><br>
-
-  <h2>About</h2>
-  <p>
-    I am Prateek Pachauri, focused on research and analysis of world politics, historical narratives,
-    diplomatic strategy, information warfare, and psychology within international affairs.
-  </p>
-
-  <br><br>
-
-  <h2>Skills & Interests</h2>
-  <p>
-    Close observation of world politics, analogies, critical/strategic thinking, academic writing,
-    Indo-Aryan linguistics, Russian history, soft & hard power, public diplomacy, intelligence studies,
-    and modern non-kinetic warfare.
-  </p>
-
-  <br><br>
-
-  <h2>Contact</h2>
-  <p>Email: arceus1722@gmail.com</p>
-  <p>Telegram: Prateek47</p>
-  <p>X (Twitter): @rusprateek77</p>
-  <p>hh.ru: https://hh.ru/profile/me?hhtmFrom=ProfileActivator</p>
-
 </div>
 
 <script>
-/* ========== DARK / LIGHT MODE SCRIPT ========== */
-let mode = "dark";
+/* ----------------- Attempt to autoplay video, else show poster + overlay to start ----------------- */
+const video = document.getElementById('bgVideo');
+const poster = document.getElementById('bgPoster');
 
-document.getElementById("modeToggle").onclick = function () {
-  if (mode === "dark") {
-    document.documentElement.classList.add("light");
-    this.textContent = "☀️ Light";
-    mode = "light";
-  } else {
-    document.documentElement.classList.remove("light");
-    this.textContent = "🌙 Dark";
-    mode = "dark";
+function tryPlayVideo(){
+  if(!video) return;
+  video.play().then(()=> {
+    // success
+    poster.style.display = 'none';
+    video.style.opacity = '0.55';
+  }).catch(err=>{
+    // autoplay blocked — leave poster visible and show a click overlay
+    poster.style.display = 'block';
+    video.style.opacity = '0';
+    showPlayOverlay();
+    console.warn('Autoplay blocked or video failed to play:', err && err.message ? err.message : err);
+  });
+}
+
+function showPlayOverlay(){
+  if(document.getElementById('playOverlay')) return;
+  const o = document.createElement('div');
+  o.id = 'playOverlay';
+  o.innerHTML = '<button style="font-size:16px;padding:12px 18px;border-radius:12px;border:0;cursor:pointer;background:var(--accent);color:#001;">► Play background</button>';
+  Object.assign(o.style,{position:'fixed',left:'50%',top:'50%',transform:'translate(-50%,-50%)',zIndex:40});
+  document.body.appendChild(o);
+  o.onclick = ()=> {
+    video.play().then(()=> {
+      poster.style.display='none';
+      video.style.opacity='0.55';
+      o.remove();
+    }).catch(e=> alert('Video still did not play: ' + (e && e.message ? e.message : e)));
+  };
+}
+
+// initial attempt
+setTimeout(tryPlayVideo, 200);
+
+// also attempt once user interacts (click)
+document.addEventListener('click', ()=> { tryPlayVideo(); }, { once: true });
+
+/* ----------------- slideshow logic ----------------- */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const thumbs = Array.from(document.querySelectorAll('.thumb'));
+let current = 0;
+function show(i){
+  slides.forEach((s,idx)=> s.classList.toggle('active', idx===i));
+  current = i;
+}
+thumbs.forEach(t => t.addEventListener('click', e=>{
+  show(parseInt(t.dataset.index));
+}));
+show(0); // initial
+
+// auto-rotate every 6s
+setInterval(()=> show((current+1)%slides.length), 6000);
+
+/* ----------------- simple chess animation generation and pawn movement  ----------------- */
+(function buildChess(){
+  const sq = document.getElementById('squares');
+  if(!sq) return;
+  // draw 8x8 squares: alternate darker squares
+  const size = 180/8;
+  let out = '';
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const x = 10 + c*size;
+      const y = 10 + r*size;
+      const dark = (r+c)%2===1;
+      const fill = dark ? '#1f2a3d' : '#eef1fb';
+      out += `<rect x="${x}" y="${y}" width="${size}" height="${size}" fill="${fill}"></rect>`;
+    }
   }
-};
+  sq.innerHTML = out;
+
+  // animate pawn across board using CSS keyframes created on the fly
+  const pawn = document.getElementById('pawn');
+  if(!pawn) return;
+  // create keyframes style
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes pawnMove {
+      0% { transform: translate(20px,140px); opacity:1; }
+      50% { transform: translate(120px,60px); opacity:1; }
+      100% { transform: translate(160px,20px); opacity:1; }
+    }
+  `;
+  document.head.appendChild(style);
+  pawn.style.transition = 'transform 1s linear';
+  pawn.style.animation = 'pawnMove 6s linear infinite';
+})();
+
+/* ----------------- dark/light toggle ----------------- */
+const modeBtn = document.getElementById('modeBtn');
+modeBtn.addEventListener('click', ()=>{
+  const has = document.documentElement.classList.toggle('light');
+  modeBtn.textContent = has ? '☀️ Light' : '🌙 Dark';
+});
+
 </script>
 
 </body>
